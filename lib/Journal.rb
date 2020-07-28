@@ -1,4 +1,4 @@
 class Journal < ActiveRecord::Base
     has_many :entries
-    has_man :users, through: :entries
+    has_many :users, through: :entries
 end 
