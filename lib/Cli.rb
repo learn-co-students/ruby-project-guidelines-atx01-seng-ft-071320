@@ -12,32 +12,31 @@ class Cli
         @journal_user = User.find_or_create_by(name: user_n)
 
         if find_name == true
+            puts "\nWelcome back #{user_n}! Let's take some time to reflect on our day."
             5.times do 
-                puts "\nWelcome back #{user_n}! Let's take some time to reflect on our day."
-            puts "Let's do a breathing exercise."
-                sleep(2.seconds)
-            puts "Breathe in..."
-                sleep(4.seconds)
-            puts "Hold..."
-                sleep(8.seconds)
-            puts "Breathe out..."
-                sleep(6.seconds)
-            puts `clear`
+                puts "Let's do a breathing exercise."
+                    sleep(2.seconds)
+                    puts "Breathe in..."
+                    sleep(4.seconds)
+                    puts "Hold..."
+                    sleep(8.seconds)
+                    puts "Breathe out..."
+                    sleep(6.seconds)
+                    puts `clear`
             end
             
         else
             puts "\nWelcome to Emoticreate, #{user_n}!"
             5.times do 
-                puts "\nWelcome back #{user}! Let's take some time to reflect on our day."
-            puts "Let's do a breathing exercise."
-                sleep(2.seconds)
-            puts "Breathe in..."
-                sleep(4.seconds)
-            puts "Hold..."
-                sleep(8.seconds)
-            puts "Breathe out..."
-                sleep(6.seconds)
-            puts `clear`
+                puts "Let's do a breathing exercise."
+                    sleep(2.seconds)
+                    puts "Breathe in..."
+                    sleep(4.seconds)
+                    puts "Hold..."
+                    sleep(8.seconds)
+                    puts "Breathe out..."
+                    sleep(6.seconds)
+                    puts `clear`
             end
         end
 #binding.pry
