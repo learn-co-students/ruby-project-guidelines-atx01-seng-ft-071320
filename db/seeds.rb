@@ -1,4 +1,5 @@
 #this is where our seeds will go
+
 personal = Journal.create(journal_name: "Personal")
 work = Journal.create(journal_name: "Work")
 activity = Journal.create(journal_name: "Activity")

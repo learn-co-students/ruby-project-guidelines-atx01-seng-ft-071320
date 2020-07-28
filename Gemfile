@@ -7,4 +7,4 @@ gem "pry"
 gem "require_all"
 gem 'activerecord'
 gem 'rake'
-
+gem 'tty-prompt', '~> 0.22.0'
