@@ -13,7 +13,7 @@ class Cli
 
         if find_name == true
             5.times do 
-                puts "\nWelcome back #{user}! Let's take some time to reflect on our day."
+                puts "\nWelcome back #{user_n}! Let's take some time to reflect on our day."
             puts "Let's do a breathing exercise."
                 sleep(2.seconds)
             puts "Breathe in..."
@@ -26,7 +26,7 @@ class Cli
             end
             
         else
-            puts "\nWelcome to Emoticreate, #{user}!"
+            puts "\nWelcome to Emoticreate, #{user_n}!"
             5.times do 
                 puts "\nWelcome back #{user}! Let's take some time to reflect on our day."
             puts "Let's do a breathing exercise."
