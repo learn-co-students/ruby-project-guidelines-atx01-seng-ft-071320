@@ -4,6 +4,7 @@ require 'json'
 require 'pry'
 require 'net/http'
 require 'openssl'
+require 'table_print'
 
 class User < ActiveRecord::Base
     has_many :entries
@@ -13,11 +14,13 @@ class User < ActiveRecord::Base
     def menu
         puts `clear`
         prompt = TTY::Prompt.new
-        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry"])
+        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries"])
         
         case menu_select
         when "Write a new entry"
             select_journal
+        when "See all entries"
+            see_all_entries
         end
     end
 
@@ -114,4 +117,15 @@ class User < ActiveRecord::Base
     def close_journal
         puts "This will close the application"
     end 
+
+    def see_all_entries
+        #self_entries = Entry.select {|entry| entry.user == self}
+        #tp Entry.where(user: self).take, :entry_text, :emotion
+        tp Entry.all, :entry_text, :emotion
+        newline = "\n"
+        10.times do
+            puts newline
+        end
+        after_entry_options
+    end
 end

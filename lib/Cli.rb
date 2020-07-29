@@ -11,7 +11,7 @@ class Cli
         find_name = User.find{|user| user.name.upcase == user_n.upcase}
         @journal_user = User.find_or_create_by(name: user_n)
 
-        if find_name == true
+        if find_name 
             puts "\nWelcome back #{user_n}! Let's take some time to reflect on our day."
             sleep(2.seconds)
             puts `clear`
