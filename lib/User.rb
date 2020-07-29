@@ -40,6 +40,7 @@ class User < ActiveRecord::Base
 
     def write_new_entry(entry, emotion, journal_type)
         self.entries.create(entry_text: entry, emotion: emotion, journal: journal_type)
+        #binding.pry 
     end
 
     def personal_entry
@@ -115,7 +116,7 @@ class User < ActiveRecord::Base
     def find_emotion(input)
         text = input
         a = text.split
-        b = Array.new(a.length, "%20")
+        b = Array.new(a.length, "%20") #"I%20Had%20fun"
         new_text = a.zip(b).flatten
         new_text.pop
         insert = new_text.join
