@@ -1,11 +1,11 @@
 #this is where our seeds will go
 
-personal = Journal.create(journal_name: "Personal")
-work = Journal.create(journal_name: "Work")
-activity = Journal.create(journal_name: "Activity")
+personal = Journal.create(name: "Personal")
+work = Journal.create(name: "Work")
+activity = Journal.create(name: "Activity")
 
-allene = User.create(user_name: "Allene")
-christina = User.create(user_name: "Christina")
+allene = User.create(name: "Allene")
+christina = User.create(name: "Christina")
 
 Entry.create(entry_text: "I had a good morning!", user: christina, journal: personal)
 Entry.create(entry_text: "I did yoga today.", user: allene, journal: activity)
