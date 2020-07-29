@@ -1,4 +1,5 @@
-require 'pry'
+#require 'pry'
+require 'tty-prompt'
 class Cli
 
     attr_reader :journal_user
