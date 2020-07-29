@@ -43,6 +43,12 @@ class User < ActiveRecord::Base
         puts "Let's analyze your emotions!" #put spinner while finding emotion
         emo = find_emotion(entry)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
+        if %w(sadness anger fear disgust).include? emo
+            puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
+            moment_of_zen
+        else
+            puts "Looks like you had a great day!"
+        end
         puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
     end
 
@@ -81,5 +87,9 @@ class User < ActiveRecord::Base
         emotion_scores = result["emotion_scores"].select {|k,v| k if v > 0.02}
         emotions = emotion_scores.keys[0]          #.join(", ")
         return emotions
+    end
+
+    def moment_of_zen
+        puts "This will be a moment of zen <3 maybe we can do something funny here"
     end
 end
