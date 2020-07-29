@@ -120,8 +120,8 @@ class User < ActiveRecord::Base
 
     def see_all_entries
         #self_entries = Entry.select {|entry| entry.user == self}
-        #tp Entry.where(user: self).take, :entry_text, :emotion
-        tp Entry.all, :entry_text, :emotion
+        tp Entry.where(user: self).take, :entry_text, :emotion
+        #tp Entry.all, :entry_text, :emotion
         newline = "\n"
         10.times do
             puts newline
