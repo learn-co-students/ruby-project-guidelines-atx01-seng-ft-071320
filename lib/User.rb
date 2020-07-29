@@ -1,4 +1,10 @@
 require 'tty-prompt'
+require 'open-uri'
+require 'json'
+require 'pry'
+require 'net/http'
+require 'openssl'
+
 class User < ActiveRecord::Base
     has_many :entries
     has_many :journals, through: :entries
@@ -46,5 +52,34 @@ class User < ActiveRecord::Base
     
     def activity_entry
         puts "This method has not been written"
+    end
+
+    def find_emotion(input)
+        text = input
+        a = text.split
+        b = Array.new(a.length, "%20")
+        new_text = a.zip(b).flatten
+        new_text.pop
+        insert = new_text.join
+        #binding.pry 
+        url = URI("https://twinword-emotion-analysis-v1.p.rapidapi.com/analyze/?text=#{insert}")
+        #binding.pry 
+
+        http = Net::HTTP.new(url.host, url.port)
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+        request = Net::HTTP::Get.new(url)
+        request["x-rapidapi-host"] = 'twinword-emotion-analysis-v1.p.rapidapi.com'
+        request["x-rapidapi-key"] = 'adced4ae6amshb206e15787ec65dp17d3adjsncabafd1abcbf'
+
+        response = http.request(request)
+        #puts response.read_body
+        result = JSON.parse(response.read_body)
+        #emotions = result["emotion_scores"].select{|k,v| k if v > 0.02}
+        #emotions = result["emotions_detected"].join(", ")
+        emotion_scores = result["emotion_scores"].select {|k,v| k if v > 0.02}
+        emotions = emotion_scores.keys[0]          #.join(", ")
+        return emotions
     end
 end
