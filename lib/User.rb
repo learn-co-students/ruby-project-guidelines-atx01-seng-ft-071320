@@ -166,14 +166,24 @@ class User < ActiveRecord::Base
 
     def see_all_entries
         #self_entries = Entry.select {|entry| entry.user == self}
-        newline = "\n\n\n"
+        @newline = "\n\n\n"
         puts `clear`
         puts "Take a look at all your entries!"
         sleep(1.seconds)
-        puts newline
+        puts @newline
         tp Entry.where(user: self), :entry_text, :emotion
         #tp Entry.all, :entry_text, :emotion
-        puts newline
+        puts @newline
+        after_entry_options
+    end
+
+    def find_entries_by_emotion
+        puts `clear`
+        prompt = TTY::Prompt.new
+        select_emo = prompt.select("Which emotion do you want to find entries for?", ["joy", "surprise", "netural", "sadness", "fear", "anger", "disgust"])
+        puts @newline
+        tp Entry.where(user: self, emotion: select_emo), :entry_text, :emotion
+        puts @newline
         after_entry_options
     end
 end
