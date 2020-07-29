@@ -8,7 +8,7 @@ require 'openssl'
 class User < ActiveRecord::Base
     has_many :entries
     has_many :journals, through: :entries
-    attr_accessor :current_entry, :emotion
+    attr_accessor :current_entry
 
     def menu
         puts `clear`
@@ -33,6 +33,10 @@ class User < ActiveRecord::Base
         end 
     end 
 
+    def write_new_entry(entry, emotion, journal_type)
+        self.entries.create(entry_text: entry, emotion: emotion, journal: journal_type)
+    end
+
     def personal_entry
         #puts "This method has not been written"
         personal = Journal.all.find {|journal| journal.name == "Personal"}
@@ -43,6 +47,7 @@ class User < ActiveRecord::Base
         puts "Let's analyze your emotions!" #put spinner while finding emotion
         emo = find_emotion(entry)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
+        write_new_entry(entry, emo, personal)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
             moment_of_zen
