@@ -120,12 +120,14 @@ class User < ActiveRecord::Base
 
     def see_all_entries
         #self_entries = Entry.select {|entry| entry.user == self}
-        tp Entry.where(user: self).take, :entry_text, :emotion
+        newline = "\n\n\n"
+        puts `clear`
+        puts "Take a look at all your entries!"
+        sleep(1.seconds)
+        puts newline
+        tp Entry.where(user: self), :entry_text, :emotion
         #tp Entry.all, :entry_text, :emotion
-        newline = "\n"
-        10.times do
-            puts newline
-        end
+        puts newline
         after_entry_options
     end
 end

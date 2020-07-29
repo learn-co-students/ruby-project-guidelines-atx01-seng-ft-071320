@@ -15,19 +15,19 @@ class Cli
             puts "\nWelcome back #{user_n}! Let's take some time to reflect on our day."
             sleep(2.seconds)
             puts `clear`
-            puts "To help with that, let's do a breathing exercise."
-                sleep(2.seconds)
-                puts "Ready?"
-                sleep(1.seconds)
-                    puts "Breathe in..."
-                    sleep(4.seconds)
-                    puts "Hold..."
-                    sleep(8.seconds)
-                    puts "Breathe out..."
-                    sleep(6.seconds)
-                    #puts "Let's do it again!"
-                    #sleep(2.seconds)
-                    puts `clear`
+            # puts "To help with that, let's do a breathing exercise."
+            #     sleep(2.seconds)
+            #     puts "Ready?"
+            #     sleep(1.seconds)
+            #         puts "Breathe in..."
+            #         sleep(4.seconds)
+            #         puts "Hold..."
+            #         sleep(8.seconds)
+            #         puts "Breathe out..."
+            #         sleep(6.seconds)
+            #         #puts "Let's do it again!"
+            #         #sleep(2.seconds)
+            #         puts `clear`
             @journal_user.menu
             
         else
