@@ -55,6 +55,7 @@ class User < ActiveRecord::Base
             puts "Looks like you had a great day!"
         end
         puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
+        after_entry_options
     end
 
     def work_entry
@@ -97,4 +98,19 @@ class User < ActiveRecord::Base
     def moment_of_zen
         puts "This will be a moment of zen <3 maybe we can do something funny here"
     end
+
+    def after_entry_options
+        prompt = TTY::Prompt.new
+        menu_or_close = prompt.select("What would you like to do now?", ["Go back to home screen", "Close journal"])
+            case menu_or_close
+            when "Go back to home screen"
+                menu
+            when "Close journal"
+                close_journal
+            end
+    end
+
+    def close_journal
+        puts "This will close the application"
+    end 
 end
