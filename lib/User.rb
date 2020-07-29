@@ -14,13 +14,15 @@ class User < ActiveRecord::Base
     def menu
         puts `clear`
         prompt = TTY::Prompt.new
-        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries"])
+        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Find entries by emotion"])
         
         case menu_select
         when "Write a new entry"
             select_journal
         when "See all entries"
             see_all_entries
+        when "Find entries by emotion"
+            find_entries_by_emotion
         end
     end
 
@@ -54,6 +56,8 @@ class User < ActiveRecord::Base
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
             moment_of_zen
+        elsif %w(neutral nothing).include? emo
+            puts "Looks like your day was just ok, and that's fine! Not every day can be amazing."
         else
             puts "Looks like you had a great day!"
         end
@@ -62,11 +66,47 @@ class User < ActiveRecord::Base
     end
 
     def work_entry
-        puts "This method has not been written"
+        work = Journal.all.find {|journal| journal.name == "Work"}
+        prompt = TTY::Prompt.new
+        puts `clear`
+        puts "Welcome to your work journal!"
+        entry = prompt.ask("Write a sentence here:")
+        puts "Let's analyze your emotions!" #put spinner while finding emotion
+        emo = find_emotion(entry)
+        puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
+        write_new_entry(entry, emo, work)
+        if %w(sadness anger fear disgust).include? emo
+            puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
+            moment_of_zen
+        elsif %w(neutral nothing).include? emo
+            puts "Looks like your day was just ok, and that's fine! Not every day can be amazing."
+        else
+            puts "Looks like you had a great day!"
+        end
+        puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
+        after_entry_options
     end
     
     def activity_entry
-        puts "This method has not been written"
+        activity = Journal.all.find {|journal| journal.name == "Activity"}
+        prompt = TTY::Prompt.new
+        puts `clear`
+        puts "Welcome to your activity journal!"
+        entry = prompt.ask("Write a sentence here:")
+        puts "Let's analyze your emotions!" #put spinner while finding emotion
+        emo = find_emotion(entry)
+        puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
+        write_new_entry(entry, emo, activity)
+        if %w(sadness anger fear disgust).include? emo
+            puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
+            moment_of_zen
+        elsif %w(neutral nothing).include? emo
+            puts "Looks like your day was just ok, and that's fine! Not every day can be amazing."
+        else
+            puts "Looks like you had a great day!"
+        end
+        puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
+        after_entry_options
     end
 
     def find_emotion(input)
@@ -95,7 +135,12 @@ class User < ActiveRecord::Base
         #emotions = result["emotions_detected"].join(", ")
         emotion_scores = result["emotion_scores"].select {|k,v| k if v > 0.02}
         emotions = emotion_scores.keys[0]          #.join(", ")
-        return emotions
+        neutral = "neutral"
+        if emotions == nil 
+            return neutral
+        else
+            return emotions
+        end
     end
 
     def moment_of_zen
