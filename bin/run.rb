@@ -1,5 +1,6 @@
 require_relative '../config/environment'
+require 'tty-prompt'
 
+puts `clear`
 
-
-puts "HELLO WORLD"
+Cli.new.welcome_message
