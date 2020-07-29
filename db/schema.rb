@@ -14,6 +14,10 @@ ActiveRecord::Schema.define(version: 2020_07_29_154108) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
+    t.string "abstract"
+    t.string "category"
+    t.string "author"
+    t.string "url"
   end
 
   create_table "user_articles", force: :cascade do |t|
