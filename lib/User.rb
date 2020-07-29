@@ -100,6 +100,8 @@ class User < ActiveRecord::Base
 
     def moment_of_zen
         puts "This will be a moment of zen <3 maybe we can do something funny here"
+        sleep(2.seconds)
+        puts `clear`
     end
 
     def after_entry_options
