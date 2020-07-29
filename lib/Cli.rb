@@ -13,8 +13,9 @@ class Cli
 
         if find_name == true
             puts "\nWelcome back #{user_n}! Let's take some time to reflect on our day."
+            sleep(2.seconds)
+            puts `clear`
             puts "To help with that, let's do a breathing exercise."
-            2.times do 
                 sleep(2.seconds)
                 puts "Ready?"
                 sleep(1.seconds)
@@ -24,15 +25,16 @@ class Cli
                     sleep(8.seconds)
                     puts "Breathe out..."
                     sleep(6.seconds)
-                    puts "Let's do it again!"
-                    sleep(2.seconds)
+                    #puts "Let's do it again!"
+                    #sleep(2.seconds)
                     puts `clear`
-            end
+            @journal_user.menu
             
         else
             puts "\nWelcome to Emoticreate, #{user_n}! Let's take some time to reflect on our day."
+            sleep(2.seconds)
+            puts `clear`
             puts "To help with that, let's do a breathing exercise."
-            2.times do
                 sleep(2.seconds)
                 puts "Ready?"
                 sleep(1.seconds)
@@ -42,10 +44,10 @@ class Cli
                     sleep(8.seconds)
                     puts "Breathe out..."
                     sleep(6.seconds)
-                    puts "Let's do it again!"
-                    sleep(2.seconds)
+                    #puts "Let's do it again!"
+                    #sleep(2.seconds)
                     puts `clear`
-            end
+            @journal_user.menu
         end
 #binding.pry
     end
