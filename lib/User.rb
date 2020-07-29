@@ -44,7 +44,8 @@ class User < ActiveRecord::Base
 
     def personal_entry
         #puts "This method has not been written"
-        personal = Journal.all.find {|journal| journal.name == "Personal"}
+        journal_name = "Personal"
+        personal = Journal.find_or_create_by(name: journal_name)
         prompt = TTY::Prompt.new
         puts `clear`
         puts "Welcome to your personal journal!"
@@ -66,7 +67,8 @@ class User < ActiveRecord::Base
     end
 
     def work_entry
-        work = Journal.all.find {|journal| journal.name == "Work"}
+        journal_name = "Work"
+        work = Journal.find_or_create_by(name: journal_name)
         prompt = TTY::Prompt.new
         puts `clear`
         puts "Welcome to your work journal!"
@@ -88,7 +90,8 @@ class User < ActiveRecord::Base
     end
     
     def activity_entry
-        activity = Journal.all.find {|journal| journal.name == "Activity"}
+        journal_name = "Activity"
+        activity = Journal.find_or_create_by(name: journal_name)
         prompt = TTY::Prompt.new
         puts `clear`
         puts "Welcome to your activity journal!"
@@ -182,7 +185,7 @@ class User < ActiveRecord::Base
         prompt = TTY::Prompt.new
         select_emo = prompt.select("Which emotion do you want to find entries for?", ["joy", "surprise", "netural", "sadness", "fear", "anger", "disgust"])
         puts @newline
-        tp Entry.where(user: self, emotion: select_emo), :entry_text, :emotion
+        tp Entry.where(user: self, emotion: select_emo) #, :entry_text, :emotion
         puts @newline
         after_entry_options
     end
