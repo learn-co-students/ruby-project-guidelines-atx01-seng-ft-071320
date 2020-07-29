@@ -13,7 +13,7 @@ class Cli
 
         if find_name == true
             puts "\nWelcome back #{user_n}! Let's take some time to reflect on our day."
-            puts "Let's do a breathing exercise."
+            puts "To help with that, let's do a breathing exercise."
             2.times do 
                 sleep(2.seconds)
                 puts "Ready?"
@@ -30,8 +30,8 @@ class Cli
             end
             
         else
-            puts "\nWelcome to Emoticreate, #{user_n}!"
-            puts "Let's do a breathing exercise."
+            puts "\nWelcome to Emoticreate, #{user_n}! Let's take some time to reflect on our day."
+            puts "To help with that, let's do a breathing exercise."
             2.times do
                 sleep(2.seconds)
                 puts "Ready?"
@@ -50,3 +50,10 @@ class Cli
 #binding.pry
     end
 end
+
+
+# puts breathe in 
+# sleep(2 seconds)
+# puts "4..."
+# sleep(1 scond)
+# puts "3...."
