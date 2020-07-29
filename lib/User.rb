@@ -34,6 +34,9 @@ class User < ActiveRecord::Base
         puts `clear`
         puts "Welcome to your personal journal!"
         entry = prompt.ask("Write a sentence here:")
+        puts "Let's analyze your emotions!" #put spinner while finding emotion
+        emo = find_emotion(entry)
+        puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
         puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
     end
 
