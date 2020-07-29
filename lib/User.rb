@@ -2,7 +2,7 @@ require 'tty-prompt'
 class User < ActiveRecord::Base
     has_many :entries
     has_many :journals, through: :entries
-    attr_accessor :current_entry
+    attr_accessor :current_entry, :emotion
 
     def menu
         puts `clear`
@@ -28,7 +28,13 @@ class User < ActiveRecord::Base
     end 
 
     def personal_entry
-        puts "This method has not been written"
+        #puts "This method has not been written"
+        personal = Journal.all.find {|journal| journal.name == "Personal"}
+        prompt = TTY::Prompt.new
+        puts `clear`
+        puts "Welcome to your personal journal!"
+        entry = prompt.ask("Write a sentence here:")
+        puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
     end
 
     def work_entry
