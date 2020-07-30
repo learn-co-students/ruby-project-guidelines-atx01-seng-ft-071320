@@ -214,7 +214,7 @@ class User < ActiveRecord::Base
     end 
 
     def see_all_entries
-        #self_entries = Entry.select {|entry| entry.user == self}
+        prompt = TTY::Prompt.new
         @newline = "\n\n\n"
         puts `clear`
         puts "Take a look at all your entries!"
@@ -223,7 +223,13 @@ class User < ActiveRecord::Base
         tp Entry.where(user: self), :id, :entry, :emotion, :created_on, :journal_name
         #tp Entry.all, :entry_text, :emotion
         puts @newline
-        after_entry_options
+        select_entry = prompt.yes?("Would you like to select an entry?")
+        if select_entry
+            select_entry_by_id
+        else
+            puts @newline
+            after_entry_options
+        end
     end
 
     def find_entries_by_emotion
@@ -253,12 +259,18 @@ class User < ActiveRecord::Base
     def select_entry_by_id
         prompt = TTY::Prompt.new
         puts @newline
-        tp Entry.where(user: self), :id, :entry, :emotion, :created_on, :journal_name
-        puts @newline
+        #tp Entry.where(user: self), :id, :entry, :emotion, :created_on, :journal_name
+        #puts @newline
         id = prompt.ask("Which entry would you like to select?")
-        selected = Entry.where(id: id)
-        tp Entry.where(id: id)
+        selected = Entry.where(user: self, id: id).first 
+        tp Entry.where(user: self, id: id), :id, :entry, :emotion, :created_on, :journal_name
         @current_entry = selected
+        puts @newline
+        view_entry = prompt.yes?("Would you like to view the full entry?")
+        if view_entry
+            ap @current_entry.entry 
+        end
+        after_entry_options
     end
 
 end
