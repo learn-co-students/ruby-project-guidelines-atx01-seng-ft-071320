@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_30_190412) do
+ActiveRecord::Schema.define(version: 2020_07_30_202942) do
 
   create_table "entries", force: :cascade do |t|
     t.integer "journal_id"
     t.integer "user_id"
-    t.text "entry_text"
+    t.text "entry"
     t.string "emotion"
     t.datetime "created_on"
     t.string "journal_name"
