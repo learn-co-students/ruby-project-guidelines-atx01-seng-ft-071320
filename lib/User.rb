@@ -12,11 +12,11 @@ require 'paint'
 class User < ActiveRecord::Base
     has_many :entries
     has_many :journals, through: :entries
-    attr_accessor :current_entry, :newline
+    attr_accessor :current_entry, :newline, :prompt
 
     def menu
         puts `clear`
-        prompt = TTY::Prompt.new
+        @prompt = TTY::Prompt.new
         menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Delete an entry","Find entries by emotion", "Find entries by journal type", "Exit"])
         
         case menu_select
@@ -216,7 +216,7 @@ class User < ActiveRecord::Base
     end 
 
     def see_all_entries
-        prompt = TTY::Prompt.new
+        @prompt 
         @newline = "\n\n\n"
         puts `clear`
         puts "Here is a list of all your entries:"
@@ -269,33 +269,37 @@ class User < ActiveRecord::Base
             q.messages[:valid?] = "Invalid entry. Must be a number!"
         end 
         selected = Entry.where(user: self, id: id).first 
-        tp Entry.where(user: self, id: id), :id, :entry, :emotion, :created_on, :journal_name
-        @current_entry = selected
-        puts @newline
+        if selected
+            @current_entry = selected
+            tp Entry.where(user: self, id: id), :id, :entry, :emotion, :created_on, :journal_name
+            view_full_entry
+        else
+            puts "OOPS! It appears that isn't a valid entry. Please go back and try again."
+            sleep(3)
+            menu 
+        end
+    end
+
+    def view_full_entry
+        @prompt 
         view_entry = prompt.yes?("Would you like to view the full entry?")
         if view_entry
             ap @current_entry.entry 
-            delete_entry = prompt.yes?("Would you like to delete this entry?")
-            if delete_entry
-                delete_an_entry
-            else
-                after_entry_options
-            end
         end
-        delete_entry = prompt.yes?("Would you like to delete this entry?")
-            if delete_entry
-                delete_an_entry
-            end
-        after_entry_options
+        delete_an_entry
     end
 
     def delete_an_entry
         prompt = TTY::Prompt.new
-        are_u_sure = prompt.yes?("Are you SURE? Once an entry is deleted, it cannot be recovered.")
-        if are_u_sure
-            @current_entry.destroy
-            puts "Your entry has been deleted."
-        end
+        delete_entry = prompt.yes?("Would you like to delete this entry?")
+            if delete_entry
+                are_u_sure = prompt.yes?("Are you SURE? Once an entry is deleted, it cannot be recovered.")
+                if are_u_sure
+                    @current_entry.destroy
+                    puts "Your entry has been deleted."
+                end
+            end
+            after_entry_options
     end
 
 end
