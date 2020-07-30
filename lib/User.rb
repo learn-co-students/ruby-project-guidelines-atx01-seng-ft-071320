@@ -269,7 +269,19 @@ class User < ActiveRecord::Base
         view_entry = prompt.yes?("Would you like to view the full entry?")
         if view_entry
             ap @current_entry.entry 
+            delete_entry = prompt.yes?("Would you like to delete this entry?")
+            if delete_entry
+                @current_entry.destroy
+            else
+                after_entry_options
+            end
         end
+        delete_entry = prompt.yes?("Would you like to delete this entry?")
+            if delete_entry
+                @current_entry.destroy
+            else
+                after_entry_options
+            end
         after_entry_options
     end
 
