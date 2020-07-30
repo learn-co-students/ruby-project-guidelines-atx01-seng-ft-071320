@@ -20,6 +20,7 @@ GEM
     minitest (5.14.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    paint (2.2.0)
     pastel (0.8.0)
       tty-color (~> 0.5)
     pry (0.13.1)
@@ -57,6 +58,9 @@ GEM
       tty-cursor (~> 0.7)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    unicode-display_width (1.7.0)
+    whirly (0.2.6)
+      unicode-display_width (~> 1.1)
     wisper (2.0.1)
     zeitwerk (2.4.0)
 
@@ -65,6 +69,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  paint
   pry
   rake
   require_all
@@ -73,6 +78,7 @@ DEPENDENCIES
   table_print
   tty-prompt (~> 0.22.0)
   tty-spinner
+  whirly
 
 BUNDLED WITH
    2.1.4

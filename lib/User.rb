@@ -6,6 +6,8 @@ require 'net/http'
 require 'openssl'
 require 'table_print'
 require 'tty-spinner'
+require 'whirly'
+require 'paint'
 
 class User < ActiveRecord::Base
     has_many :entries
@@ -59,14 +61,15 @@ class User < ActiveRecord::Base
             q.messages[:valid?] = "Invalid entry. Try again with a word or sentence."
         end 
         puts "Let's analyze your emotions!" #put spinner while finding emotion
-        spinner = TTY::Spinner.new("[:spinner] ANALYZING EMOTIONS", format: :bouncing_ball)
-        spinner.auto_spin # Automatic animation with default interval
-        sleep(2)
+        Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
+        Whirly.start do 
+            sleep 1 
+        end
         emo = find_emotion(entry)
-        spinner.stop('Done!') # Stop animation
-        sleep(1)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
+        puts "\n"
         sleep(2)
+        puts "\n"
         write_new_entry(entry, emo, personal)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
@@ -76,6 +79,8 @@ class User < ActiveRecord::Base
         else
             puts "Looks like you had a great day!"
         end
+        puts "\n"
+        puts "\n" # refactor lines
         puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
         after_entry_options
     end
@@ -92,13 +97,15 @@ class User < ActiveRecord::Base
             q.messages[:valid?] = "Invalid entry. Try again with a word or sentence."
         end
         puts "Let's analyze your emotions!" #put spinner while finding emotion
-        spinner = TTY::Spinner.new("[:spinner] ANALYZING EMOTIONS", format: :bouncing_ball)
-        spinner.auto_spin # Automatic animation with default interval
-        sleep(2)
+        Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
+        Whirly.start do 
+            sleep 1 
+        end
         emo = find_emotion(entry)
-        spinner.stop('Done!') # Stop animation
-        sleep(1)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
+        puts "\n"
+        sleep(2)
+        puts "\n"
         write_new_entry(entry, emo, work)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
@@ -108,7 +115,8 @@ class User < ActiveRecord::Base
         else
             puts "Looks like you had a great day!"
         end
-        puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
+        puts "\n"
+        puts "\n" # refactor lines
         after_entry_options
     end
     
@@ -124,13 +132,15 @@ class User < ActiveRecord::Base
             q.messages[:valid?] = "Invalid entry. Try again with a sentence (or two!)"
         end
         puts "Let's analyze your emotions!" #put spinner while finding emotion
-        spinner = TTY::Spinner.new("[:spinner] ANALYZING EMOTIONS", format: :bouncing_ball)
-        spinner.auto_spin # Automatic animation with default interval
-        sleep(2)
+        Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
+        Whirly.start do 
+            sleep 1 
+        end
         emo = find_emotion(entry)
-        spinner.stop('Done!') # Stop animation
-        sleep(1)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
+        puts "\n"
+        sleep(2)
+        puts "\n"
         write_new_entry(entry, emo, activity)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
@@ -140,6 +150,8 @@ class User < ActiveRecord::Base
         else
             puts "Looks like you had a great day!"
         end
+        puts "\n"
+        puts "\n" # refactor lines
         puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
         after_entry_options
     end
