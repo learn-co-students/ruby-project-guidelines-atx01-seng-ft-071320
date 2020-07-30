@@ -12,7 +12,7 @@ require 'paint'
 class User < ActiveRecord::Base
     has_many :entries
     has_many :journals, through: :entries
-    attr_accessor :current_entry, :newline, :prompt
+    attr_accessor :current_entry, :newline, :prompt, :current_journal
 
     def menu
         puts `clear`
@@ -38,27 +38,22 @@ class User < ActiveRecord::Base
     def select_journal
         @prompt
         journal_select = prompt.select("Which journal best describes what you would like to write about?", ["Personal", "Work", "Activity"])
-        if journal_select == "Personal"
-            personal_entry
-        elsif journal_select == "Work"
-            work_entry
-        else
-            activity_entry
-        end 
+        @current_journal = Journal.find_or_create_by(name: journal_select)
+        sleep(1.5)
+        puts "Great! Let's get to writing."
+        sleep(1.5)
+        journal_entry
     end 
 
     def write_new_entry(entry, emotion, journal_type, journal_name)
         self.entries.create(entry: entry, emotion: emotion, journal: journal_type, journal_name: journal_name)
-        #binding.pry 
     end
 
-    def personal_entry
-        #puts "This method has not been written"
-        journal_name = "Personal"
-        personal = Journal.find_or_create_by(name: journal_name)
+    def journal_entry
+        journal_name = @current_journal.name 
         @prompt
         puts `clear`
-        puts "Welcome to your personal journal!"
+        puts "Welcome to your #{journal_name} journal!"
         entry = prompt.ask("Write a sentence here:") do |q|
             q.required true
             q.validate /\D\w\s./
@@ -74,78 +69,7 @@ class User < ActiveRecord::Base
         puts "\n"
         sleep(2)
         puts "\n"
-        write_new_entry(entry, emo, personal, journal_name)
-        if %w(sadness anger fear disgust).include? emo
-            puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
-            moment_of_zen
-        elsif %w(neutral nothing).include? emo
-            puts "Looks like your day was just ok, and that's fine! Not every day can be amazing."
-        else
-            puts "Looks like you had a great day!"
-        end
-        puts "\n"
-        puts "\n" # refactor lines
-        puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
-        after_entry_options
-    end
-
-    def work_entry
-        journal_name = "Work"
-        work = Journal.find_or_create_by(name: journal_name)
-        @prompt
-        puts `clear`
-        puts "Welcome to your work journal!"
-        entry = prompt.ask("Write a sentence here:") do |q|
-            q.required true
-            q.validate /\D\w\s./
-            q.messages[:valid?] = "Invalid entry. Try again with a word or sentence."
-        end
-        puts "Let's analyze your emotions!" #put spinner while finding emotion
-        Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
-        Whirly.start do 
-            sleep 1 
-        end
-        emo = find_emotion(entry)
-        puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
-        puts "\n"
-        sleep(2)
-        puts "\n"
-        write_new_entry(entry, emo, work, journal_name)
-        if %w(sadness anger fear disgust).include? emo
-            puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
-            moment_of_zen
-        elsif %w(neutral nothing).include? emo
-            puts "Looks like your day was just ok, and that's fine! Not every day can be amazing."
-        else
-            puts "Looks like you had a great day!"
-        end
-        puts "\n"
-        puts "\n" # refactor lines
-        after_entry_options
-    end
-    
-    def activity_entry
-        journal_name = "Activity"
-        activity = Journal.find_or_create_by(name: journal_name)
-        @prompt 
-        puts `clear`
-        puts "Welcome to your activity journal!"
-        entry = prompt.ask("Write a sentence here:") do |q|
-            q.required true
-            q.validate /\D\w\s./
-            q.messages[:valid?] = "Invalid entry. Try again with a sentence (or two!)"
-        end
-        puts "Let's analyze your emotions!" #put spinner while finding emotion
-        Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
-        Whirly.start do 
-            sleep 1 
-        end
-        emo = find_emotion(entry)
-        puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
-        puts "\n"
-        sleep(2)
-        puts "\n"
-        write_new_entry(entry, emo, activity, journal_name)
+        write_new_entry(entry, emo, @current_journal, journal_name)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
             moment_of_zen
@@ -163,7 +87,7 @@ class User < ActiveRecord::Base
     def find_emotion(input)
         text = input
         a = text.split
-        b = Array.new(a.length, "%20") #"I%20Had%20fun"
+        b = Array.new(a.length, "%20") 
         new_text = a.zip(b).flatten
         new_text.pop
         insert = new_text.join
@@ -304,8 +228,3 @@ class User < ActiveRecord::Base
 
 end
 
-
-# if joy
-#     puts "look at all your happy entries"
-# elsif sadness
-#     puts "look at your sad entries "
