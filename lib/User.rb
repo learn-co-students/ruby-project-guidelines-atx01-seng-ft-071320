@@ -5,6 +5,7 @@ require 'pry'
 require 'net/http'
 require 'openssl'
 require 'table_print'
+require 'tty-spinner'
 
 class User < ActiveRecord::Base
     has_many :entries
@@ -58,8 +59,14 @@ class User < ActiveRecord::Base
             q.messages[:valid?] = "Invalid entry. Try again with a word or sentence."
         end 
         puts "Let's analyze your emotions!" #put spinner while finding emotion
+        spinner = TTY::Spinner.new("[:spinner] ANALYZING EMOTIONS", format: :bouncing_ball)
+        spinner.auto_spin # Automatic animation with default interval
+        sleep(2)
         emo = find_emotion(entry)
+        spinner.stop('Done!') # Stop animation
+        sleep(1)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
+        sleep(2)
         write_new_entry(entry, emo, personal)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
@@ -85,7 +92,12 @@ class User < ActiveRecord::Base
             q.messages[:valid?] = "Invalid entry. Try again with a word or sentence."
         end
         puts "Let's analyze your emotions!" #put spinner while finding emotion
+        spinner = TTY::Spinner.new("[:spinner] ANALYZING EMOTIONS", format: :bouncing_ball)
+        spinner.auto_spin # Automatic animation with default interval
+        sleep(2)
         emo = find_emotion(entry)
+        spinner.stop('Done!') # Stop animation
+        sleep(1)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
         write_new_entry(entry, emo, work)
         if %w(sadness anger fear disgust).include? emo
@@ -112,7 +124,12 @@ class User < ActiveRecord::Base
             q.messages[:valid?] = "Invalid entry. Try again with a sentence (or two!)"
         end
         puts "Let's analyze your emotions!" #put spinner while finding emotion
+        spinner = TTY::Spinner.new("[:spinner] ANALYZING EMOTIONS", format: :bouncing_ball)
+        spinner.auto_spin # Automatic animation with default interval
+        sleep(2)
         emo = find_emotion(entry)
+        spinner.stop('Done!') # Stop animation
+        sleep(1)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
         write_new_entry(entry, emo, activity)
         if %w(sadness anger fear disgust).include? emo
