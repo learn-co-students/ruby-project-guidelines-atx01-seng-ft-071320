@@ -17,12 +17,14 @@ class User < ActiveRecord::Base
     def menu
         puts `clear`
         prompt = TTY::Prompt.new
-        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Find entries by emotion", "Find entries by journal type", "Exit"])
+        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Delete an entry","Find entries by emotion", "Find entries by journal type", "Exit"])
         
         case menu_select
         when "Write a new entry"
             select_journal
         when "See all entries"
+            see_all_entries
+        when "Delete an Entry"
             see_all_entries
         when "Find entries by emotion"
             find_entries_by_emotion
@@ -217,7 +219,7 @@ class User < ActiveRecord::Base
         prompt = TTY::Prompt.new
         @newline = "\n\n\n"
         puts `clear`
-        puts "Take a look at all your entries!"
+        puts "Here is a list of all your entries:"
         sleep(1.seconds)
         puts @newline
         tp Entry.where(user: self), :id, :entry, :emotion, :created_on, :journal_name
