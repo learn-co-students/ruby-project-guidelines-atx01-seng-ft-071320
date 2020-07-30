@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_29_204443) do
+ActiveRecord::Schema.define(version: 2020_07_30_190412) do
 
   create_table "entries", force: :cascade do |t|
     t.integer "journal_id"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2020_07_29_204443) do
     t.text "entry_text"
     t.string "emotion"
     t.datetime "created_on"
+    t.string "journal_name"
   end
 
   create_table "journals", force: :cascade do |t|

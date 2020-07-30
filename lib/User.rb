@@ -43,8 +43,8 @@ class User < ActiveRecord::Base
         end 
     end 
 
-    def write_new_entry(entry, emotion, journal_type)
-        self.entries.create(entry_text: entry, emotion: emotion, journal: journal_type)
+    def write_new_entry(entry, emotion, journal_type, journal_name)
+        self.entries.create(entry_text: entry, emotion: emotion, journal: journal_type, journal_name: journal_name)
         #binding.pry 
     end
 
@@ -63,14 +63,14 @@ class User < ActiveRecord::Base
         puts "Let's analyze your emotions!" #put spinner while finding emotion
         Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
         Whirly.start do 
-            sleep 1 
+            sleep 0.5 
         end
         emo = find_emotion(entry)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
         puts "\n"
         sleep(2)
         puts "\n"
-        write_new_entry(entry, emo, personal)
+        write_new_entry(entry, emo, personal, journal_name)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
             moment_of_zen
@@ -106,7 +106,7 @@ class User < ActiveRecord::Base
         puts "\n"
         sleep(2)
         puts "\n"
-        write_new_entry(entry, emo, work)
+        write_new_entry(entry, emo, work, journal_name)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
             moment_of_zen
@@ -141,7 +141,7 @@ class User < ActiveRecord::Base
         puts "\n"
         sleep(2)
         puts "\n"
-        write_new_entry(entry, emo, activity)
+        write_new_entry(entry, emo, activity, journal_name)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
             moment_of_zen
@@ -218,7 +218,7 @@ class User < ActiveRecord::Base
         puts "Take a look at all your entries!"
         sleep(1.seconds)
         puts @newline
-        tp Entry.where(user: self) #, :entry_text, :emotion, :created_on
+        tp Entry.where(user: self), :entry_text, :emotion, :created_on, :journal_name
         #tp Entry.all, :entry_text, :emotion
         puts @newline
         after_entry_options
