@@ -263,7 +263,11 @@ class User < ActiveRecord::Base
         puts @newline
         #tp Entry.where(user: self), :id, :entry, :emotion, :created_on, :journal_name
         #puts @newline
-        id = prompt.ask("Enter entry id:")
+        id = prompt.ask("Enter entry id:") do |q|
+            q.required true
+            q.validate /^[0-9]*$/
+            q.messages[:valid?] = "Invalid entry. Must be a number!"
+        end 
         selected = Entry.where(user: self, id: id).first 
         tp Entry.where(user: self, id: id), :id, :entry, :emotion, :created_on, :journal_name
         @current_entry = selected
