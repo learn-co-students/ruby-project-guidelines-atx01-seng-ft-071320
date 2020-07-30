@@ -5,7 +5,7 @@ require 'pry'
 require 'net/http'
 require 'openssl'
 require 'table_print'
-require 'tty-spinner'
+#require 'tty-spinner'
 require 'whirly'
 require 'paint'
 
@@ -218,7 +218,7 @@ class User < ActiveRecord::Base
         puts "Take a look at all your entries!"
         sleep(1.seconds)
         puts @newline
-        tp Entry.where(user: self), :entry_text, :emotion, :created_on
+        tp Entry.where(user: self) #, :entry_text, :emotion, :created_on
         #tp Entry.all, :entry_text, :emotion
         puts @newline
         after_entry_options
@@ -227,9 +227,9 @@ class User < ActiveRecord::Base
     def find_entries_by_emotion
         puts `clear`
         prompt = TTY::Prompt.new
-        select_emo = prompt.select("Which emotion do you want to find entries for?", ["joy", "surprise", "netural", "sadness", "fear", "anger", "disgust"])
+        select_emo = prompt.select("Which emotion do you want to find entries for?", ["joy", "surprise", "neutral", "sadness", "fear", "anger", "disgust"])
         puts @newline
-        tp Entry.where(user: self, emotion: select_emo), :entry_text, :emotion, :created_on
+        tp Entry.where(user: self, emotion: select_emo) #, :entry_text, :emotion, :created_on
         puts @newline
         after_entry_options
     end
