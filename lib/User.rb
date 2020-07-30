@@ -12,7 +12,7 @@ require 'paint'
 class User < ActiveRecord::Base
     has_many :entries
     has_many :journals, through: :entries
-    attr_accessor :current_entry
+    attr_accessor :current_entry, :newline
 
     def menu
         puts `clear`
@@ -251,8 +251,14 @@ class User < ActiveRecord::Base
     end
 
     def select_entry_by_id
+        prompt = TTY::Prompt.new
         puts @newline
         tp Entry.where(user: self), :id, :entry_text, :emotion, :created_on, :journal_name
+        puts @newline
+        id = prompt.ask("Which entry would you like to select?")
+        selected = Entry.where(id: id)
+        tp Entry.where(id: id)
+        @current_entry = selected
     end
 
 end
