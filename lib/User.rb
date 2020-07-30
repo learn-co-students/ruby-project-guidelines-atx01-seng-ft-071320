@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
     def menu
         puts `clear`
         prompt = TTY::Prompt.new
-        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Find entries by emotion"])
+        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Find entries by emotion", "Exit"])
         
         case menu_select
         when "Write a new entry"
@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
             see_all_entries
         when "Find entries by emotion"
             find_entries_by_emotion
+        when "Exit"
+            close_journal
         end
     end
 
@@ -50,7 +52,11 @@ class User < ActiveRecord::Base
         prompt = TTY::Prompt.new
         puts `clear`
         puts "Welcome to your personal journal!"
-        entry = prompt.ask("Write a sentence here:")
+        entry = prompt.ask("Write a sentence here:") do |q|
+            q.required true
+            q.validate /\D\w\s./
+            q.messages[:valid?] = "Invalid entry. Try again with a word or sentence."
+        end 
         puts "Let's analyze your emotions!" #put spinner while finding emotion
         emo = find_emotion(entry)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
@@ -73,7 +79,11 @@ class User < ActiveRecord::Base
         prompt = TTY::Prompt.new
         puts `clear`
         puts "Welcome to your work journal!"
-        entry = prompt.ask("Write a sentence here:")
+        entry = prompt.ask("Write a sentence here:") do |q|
+            q.required true
+            q.validate /\D\w\s./
+            q.messages[:valid?] = "Invalid entry. Try again with a word or sentence."
+        end
         puts "Let's analyze your emotions!" #put spinner while finding emotion
         emo = find_emotion(entry)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
@@ -96,7 +106,11 @@ class User < ActiveRecord::Base
         prompt = TTY::Prompt.new
         puts `clear`
         puts "Welcome to your activity journal!"
-        entry = prompt.ask("Write a sentence here:")
+        entry = prompt.ask("Write a sentence here:") do |q|
+            q.required true
+            q.validate /\D\w\s./
+            q.messages[:valid?] = "Invalid entry. Try again with a sentence (or two!)"
+        end
         puts "Let's analyze your emotions!" #put spinner while finding emotion
         emo = find_emotion(entry)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
