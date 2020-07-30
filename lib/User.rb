@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
     end
 
     def select_journal
-        prompt = TTY::Prompt.new
+        @prompt
         journal_select = prompt.select("Which journal best describes what you would like to write about?", ["Personal", "Work", "Activity"])
         if journal_select == "Personal"
             personal_entry
@@ -56,7 +56,7 @@ class User < ActiveRecord::Base
         #puts "This method has not been written"
         journal_name = "Personal"
         personal = Journal.find_or_create_by(name: journal_name)
-        prompt = TTY::Prompt.new
+        @prompt
         puts `clear`
         puts "Welcome to your personal journal!"
         entry = prompt.ask("Write a sentence here:") do |q|
@@ -67,7 +67,7 @@ class User < ActiveRecord::Base
         puts "Let's analyze your emotions!" #put spinner while finding emotion
         Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
         Whirly.start do 
-            sleep 0.5 
+            sleep 1.5
         end
         emo = find_emotion(entry)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
@@ -92,7 +92,7 @@ class User < ActiveRecord::Base
     def work_entry
         journal_name = "Work"
         work = Journal.find_or_create_by(name: journal_name)
-        prompt = TTY::Prompt.new
+        @prompt
         puts `clear`
         puts "Welcome to your work journal!"
         entry = prompt.ask("Write a sentence here:") do |q|
@@ -127,7 +127,7 @@ class User < ActiveRecord::Base
     def activity_entry
         journal_name = "Activity"
         activity = Journal.find_or_create_by(name: journal_name)
-        prompt = TTY::Prompt.new
+        @prompt 
         puts `clear`
         puts "Welcome to your activity journal!"
         entry = prompt.ask("Write a sentence here:") do |q|
@@ -201,7 +201,7 @@ class User < ActiveRecord::Base
     end
 
     def after_entry_options
-        prompt = TTY::Prompt.new
+        @prompt
         menu_or_close = prompt.select("What would you like to do now?", ["Go back to home screen", "Close journal"])
             case menu_or_close
             when "Go back to home screen"
@@ -237,7 +237,7 @@ class User < ActiveRecord::Base
     def find_entries_by_emotion
         puts `clear`
         choices = %w(joy surprise neutral sadness fear anger disgust)
-        prompt = TTY::Prompt.new
+        @prompt
         select_emo = prompt.multi_select("Which emotion(s) do you want to find entries for?", choices)
         puts @newline
         #binding.pry
@@ -249,7 +249,7 @@ class User < ActiveRecord::Base
     def find_entries_by_journal_type
         puts `clear`
         choices = %w(Personal Work Activity)
-        prompt = TTY::Prompt.new
+        @prompt
         journal_name = prompt.multi_select("Which journal(s) do you want to find entries for?", choices)
         puts @newline
         #binding.pry
@@ -259,7 +259,7 @@ class User < ActiveRecord::Base
     end
 
     def select_entry_by_id
-        prompt = TTY::Prompt.new
+        @prompt 
         puts @newline
         #tp Entry.where(user: self), :id, :entry, :emotion, :created_on, :journal_name
         #puts @newline
@@ -275,7 +275,7 @@ class User < ActiveRecord::Base
             view_full_entry
         else
             puts "OOPS! It appears that isn't a valid entry. Please go back and try again."
-            sleep(3)
+            sleep(2)
             menu 
         end
     end
@@ -290,7 +290,7 @@ class User < ActiveRecord::Base
     end
 
     def delete_an_entry
-        prompt = TTY::Prompt.new
+        @prompt 
         delete_entry = prompt.yes?("Would you like to delete this entry?")
             if delete_entry
                 are_u_sure = prompt.yes?("Are you SURE? Once an entry is deleted, it cannot be recovered.")
