@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
     def menu
         puts `clear`
         prompt = TTY::Prompt.new
-        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Find entries by emotion", "Exit"])
+        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Find entries by emotion", "Find entries by journal type", "Exit"])
         
         case menu_select
         when "Write a new entry"
@@ -26,6 +26,8 @@ class User < ActiveRecord::Base
             see_all_entries
         when "Find entries by emotion"
             find_entries_by_emotion
+        when "Find entries by journal type"
+            find_entries_by_journal_type
         when "Exit"
             close_journal
         end
@@ -231,7 +233,19 @@ class User < ActiveRecord::Base
         select_emo = prompt.multi_select("Which emotion(s) do you want to find entries for?", choices)
         puts @newline
         #binding.pry
-        tp Entry.where(user: self, emotion: select_emo).order('emotion ASC'), :entry_text, :emotion, :created_on
+        tp Entry.where(user: self, emotion: select_emo).order('emotion ASC'), :entry_text, :emotion, :created_on, :journal_name
+        puts @newline
+        after_entry_options
+    end
+
+    def find_entries_by_journal_type
+        puts `clear`
+        choices = %w(Personal Work Activity)
+        prompt = TTY::Prompt.new
+        journal_name = prompt.multi_select("Which journal(s) do you want to find entries for?", choices)
+        puts @newline
+        #binding.pry
+        tp Entry.where(user: self, journal_name: journal_name).order('journal_name ASC'), :entry_text, :emotion, :created_on, :journal_name
         puts @newline
         after_entry_options
     end
