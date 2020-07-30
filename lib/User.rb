@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
             select_journal
         when "See all entries"
             see_all_entries
-        when "Delete an Entry"
+        when "Delete an entry"
             see_all_entries
         when "Find entries by emotion"
             find_entries_by_emotion
@@ -263,7 +263,7 @@ class User < ActiveRecord::Base
         puts @newline
         #tp Entry.where(user: self), :id, :entry, :emotion, :created_on, :journal_name
         #puts @newline
-        id = prompt.ask("Which entry would you like to select?")
+        id = prompt.ask("Enter entry id:")
         selected = Entry.where(user: self, id: id).first 
         tp Entry.where(user: self, id: id), :id, :entry, :emotion, :created_on, :journal_name
         @current_entry = selected
@@ -273,18 +273,25 @@ class User < ActiveRecord::Base
             ap @current_entry.entry 
             delete_entry = prompt.yes?("Would you like to delete this entry?")
             if delete_entry
-                @current_entry.destroy
+                delete_an_entry
             else
                 after_entry_options
             end
         end
         delete_entry = prompt.yes?("Would you like to delete this entry?")
             if delete_entry
-                @current_entry.destroy
-            else
-                after_entry_options
+                delete_an_entry
             end
         after_entry_options
+    end
+
+    def delete_an_entry
+        prompt = TTY::Prompt.new
+        are_u_sure = prompt.yes?("Are you SURE? Once an entry is deleted, it cannot be recovered.")
+        if are_u_sure
+            @current_entry.destroy
+            puts "Your entry has been deleted."
+        end
     end
 
 end
