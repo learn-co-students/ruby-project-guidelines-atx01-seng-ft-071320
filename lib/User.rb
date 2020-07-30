@@ -5,7 +5,7 @@ require 'pry'
 require 'net/http'
 require 'openssl'
 require 'table_print'
-#require 'tty-spinner'
+require 'awesome_print'
 require 'whirly'
 require 'paint'
 
