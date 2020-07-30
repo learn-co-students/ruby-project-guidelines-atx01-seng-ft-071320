@@ -190,4 +190,5 @@ class User < ActiveRecord::Base
         puts @newline
         after_entry_options
     end
+
 end
