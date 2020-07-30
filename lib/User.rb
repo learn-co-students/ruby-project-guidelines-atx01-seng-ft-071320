@@ -226,12 +226,20 @@ class User < ActiveRecord::Base
 
     def find_entries_by_emotion
         puts `clear`
+        choices = %w(joy surprise neutral sadness fear anger disgust)
         prompt = TTY::Prompt.new
-        select_emo = prompt.select("Which emotion do you want to find entries for?", ["joy", "surprise", "neutral", "sadness", "fear", "anger", "disgust"])
+        select_emo = prompt.multi_select("Which emotion(s) do you want to find entries for?", choices)
         puts @newline
-        tp Entry.where(user: self, emotion: select_emo) #, :entry_text, :emotion, :created_on
+        #binding.pry
+        tp Entry.where(user: self, emotion: select_emo).order('emotion ASC'), :entry_text, :emotion, :created_on
         puts @newline
         after_entry_options
     end
 
 end
+
+
+# if joy
+#     puts "look at all your happy entries"
+# elsif sadness
+#     puts "look at your sad entries "
