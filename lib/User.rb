@@ -220,7 +220,7 @@ class User < ActiveRecord::Base
         puts "Take a look at all your entries!"
         sleep(1.seconds)
         puts @newline
-        tp Entry.where(user: self), :entry_text, :emotion, :created_on, :journal_name
+        tp Entry.where(user: self), :id, :entry_text, :emotion, :created_on, :journal_name
         #tp Entry.all, :entry_text, :emotion
         puts @newline
         after_entry_options
@@ -233,7 +233,7 @@ class User < ActiveRecord::Base
         select_emo = prompt.multi_select("Which emotion(s) do you want to find entries for?", choices)
         puts @newline
         #binding.pry
-        tp Entry.where(user: self, emotion: select_emo).order('emotion ASC'), :entry_text, :emotion, :created_on, :journal_name
+        tp Entry.where(user: self, emotion: select_emo).order('emotion ASC'), :id, :entry_text, :emotion, :created_on, :journal_name
         puts @newline
         after_entry_options
     end
@@ -245,9 +245,14 @@ class User < ActiveRecord::Base
         journal_name = prompt.multi_select("Which journal(s) do you want to find entries for?", choices)
         puts @newline
         #binding.pry
-        tp Entry.where(user: self, journal_name: journal_name).order('journal_name ASC'), :entry_text, :emotion, :created_on, :journal_name
+        tp Entry.where(user: self, journal_name: journal_name).order('journal_name ASC'), :id, :entry_text, :emotion, :created_on, :journal_name
         puts @newline
         after_entry_options
+    end
+
+    def select_entry_by_id
+        puts @newline
+        tp Entry.where(user: self), :id, :entry_text, :emotion, :created_on, :journal_name
     end
 
 end
