@@ -18,7 +18,7 @@ class Cli
         @prompt = TTY::Prompt.new 
         @newline = "\n \n \n"
         #sleep(3)
-        3.times do
+        2.times do
             puts @newline
         end 
         puts "Welcome to Journalwave!" 
