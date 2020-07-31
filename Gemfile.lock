@@ -60,6 +60,7 @@ GEM
     tilt (2.0.10)
     tty-color (0.5.1)
     tty-cursor (0.7.1)
+    tty-link (0.1.1)
     tty-prompt (0.22.0)
       pastel (~> 0.8)
       tty-reader (~> 0.8)
@@ -88,6 +89,7 @@ DEPENDENCIES
   rest-client
   sinatra-activerecord
   sqlite3
+  tty-link
   tty-prompt
 
 BUNDLED WITH
