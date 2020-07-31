@@ -14,25 +14,23 @@ class Cli
     attr_reader :journal_user
     attr_accessor :current_entry, :newline, :prompt, :current_journal
 
-    def ascii_welcome
-        File.readlines("./lib/ascii_welcome.txt") do |line|
-          puts line
-        end
-    end
+    # def ascii_welcome
+    #     File.readlines("./lib/ascii_welcome.txt") do |line|
+    #       puts line
+    #     end
+    # end
 
-     def ascii_breathein
-        File.readlines("./lib/ascii_breathein.txt") do |line|
-          puts line
-        end
-    end
+    #  def ascii_breathein
+    #     File.readlines("./lib/ascii_breathein.txt") do |line|
+    #       puts line
+    #     end
+    # end
 
     def welcome_message
         @prompt = TTY::Prompt.new 
         @newline = "\n \n \n"
         #sleep(3)
-        2.times do
-            puts @newline
-        end 
+        puts `clear`
         puts "Welcome to Journalwave!" 
         sleep(1)
         puts @newline
@@ -70,6 +68,8 @@ class Cli
 
     def breathe
         puts `clear`
+        fork{exec 'lolcat -a -d 4 /Users/a_norton/mod1/Project/ruby-project-guidelines-atx01-seng-ft-071320/lib/ascii_breathein.txt'}
+        sleep 7
         puts "Clear your mind and focus on your breath."
         sleep(1)
         puts 'Ready?'
