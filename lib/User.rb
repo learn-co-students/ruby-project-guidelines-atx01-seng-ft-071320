@@ -5,56 +5,55 @@ require 'pry'
 require 'net/http'
 require 'openssl'
 require 'table_print'
-#require 'tty-spinner'
+require 'awesome_print'
 require 'whirly'
 require 'paint'
 
 class User < ActiveRecord::Base
     has_many :entries
     has_many :journals, through: :entries
-    attr_accessor :current_entry
+    attr_accessor :current_entry, :newline, :prompt, :current_journal
 
     def menu
         puts `clear`
-        prompt = TTY::Prompt.new
-        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Find entries by emotion", "Exit"])
+        @prompt = TTY::Prompt.new
+        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Delete an entry","Find entries by emotion", "Find entries by journal type", "Exit"])
         
         case menu_select
         when "Write a new entry"
             select_journal
         when "See all entries"
             see_all_entries
+        when "Delete an entry"
+            see_all_entries
         when "Find entries by emotion"
             find_entries_by_emotion
+        when "Find entries by journal type"
+            find_entries_by_journal_type
         when "Exit"
             close_journal
         end
     end
 
     def select_journal
-        prompt = TTY::Prompt.new
+        @prompt
         journal_select = prompt.select("Which journal best describes what you would like to write about?", ["Personal", "Work", "Activity"])
-        if journal_select == "Personal"
-            personal_entry
-        elsif journal_select == "Work"
-            work_entry
-        else
-            activity_entry
-        end 
+        @current_journal = Journal.find_or_create_by(name: journal_select)
+        sleep(1.5)
+        puts "Great! Let's get to writing."
+        sleep(1.5)
+        journal_entry
     end 
 
-    def write_new_entry(entry, emotion, journal_type)
-        self.entries.create(entry_text: entry, emotion: emotion, journal: journal_type)
-        #binding.pry 
+    def write_new_entry(entry, emotion, journal_type, journal_name)
+        self.entries.create(entry: entry, emotion: emotion, journal: journal_type, journal_name: journal_name)
     end
 
-    def personal_entry
-        #puts "This method has not been written"
-        journal_name = "Personal"
-        personal = Journal.find_or_create_by(name: journal_name)
-        prompt = TTY::Prompt.new
+    def journal_entry
+        journal_name = @current_journal.name 
+        @prompt
         puts `clear`
-        puts "Welcome to your personal journal!"
+        puts "Welcome to your #{journal_name} journal!"
         entry = prompt.ask("Write a sentence here:") do |q|
             q.required true
             q.validate /\D\w\s./
@@ -63,85 +62,14 @@ class User < ActiveRecord::Base
         puts "Let's analyze your emotions!" #put spinner while finding emotion
         Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
         Whirly.start do 
-            sleep 1 
+            sleep 1.5
         end
         emo = find_emotion(entry)
         puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
         puts "\n"
         sleep(2)
         puts "\n"
-        write_new_entry(entry, emo, personal)
-        if %w(sadness anger fear disgust).include? emo
-            puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
-            moment_of_zen
-        elsif %w(neutral nothing).include? emo
-            puts "Looks like your day was just ok, and that's fine! Not every day can be amazing."
-        else
-            puts "Looks like you had a great day!"
-        end
-        puts "\n"
-        puts "\n" # refactor lines
-        puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
-        after_entry_options
-    end
-
-    def work_entry
-        journal_name = "Work"
-        work = Journal.find_or_create_by(name: journal_name)
-        prompt = TTY::Prompt.new
-        puts `clear`
-        puts "Welcome to your work journal!"
-        entry = prompt.ask("Write a sentence here:") do |q|
-            q.required true
-            q.validate /\D\w\s./
-            q.messages[:valid?] = "Invalid entry. Try again with a word or sentence."
-        end
-        puts "Let's analyze your emotions!" #put spinner while finding emotion
-        Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
-        Whirly.start do 
-            sleep 1 
-        end
-        emo = find_emotion(entry)
-        puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
-        puts "\n"
-        sleep(2)
-        puts "\n"
-        write_new_entry(entry, emo, work)
-        if %w(sadness anger fear disgust).include? emo
-            puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
-            moment_of_zen
-        elsif %w(neutral nothing).include? emo
-            puts "Looks like your day was just ok, and that's fine! Not every day can be amazing."
-        else
-            puts "Looks like you had a great day!"
-        end
-        puts "\n"
-        puts "\n" # refactor lines
-        after_entry_options
-    end
-    
-    def activity_entry
-        journal_name = "Activity"
-        activity = Journal.find_or_create_by(name: journal_name)
-        prompt = TTY::Prompt.new
-        puts `clear`
-        puts "Welcome to your activity journal!"
-        entry = prompt.ask("Write a sentence here:") do |q|
-            q.required true
-            q.validate /\D\w\s./
-            q.messages[:valid?] = "Invalid entry. Try again with a sentence (or two!)"
-        end
-        puts "Let's analyze your emotions!" #put spinner while finding emotion
-        Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
-        Whirly.start do 
-            sleep 1 
-        end
-        emo = find_emotion(entry)
-        puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
-        puts "\n"
-        sleep(2)
-        puts "\n"
-        write_new_entry(entry, emo, activity)
+        write_new_entry(entry, emo, @current_journal, journal_name)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
             moment_of_zen
@@ -159,7 +87,7 @@ class User < ActiveRecord::Base
     def find_emotion(input)
         text = input
         a = text.split
-        b = Array.new(a.length, "%20") #"I%20Had%20fun"
+        b = Array.new(a.length, "%20") 
         new_text = a.zip(b).flatten
         new_text.pop
         insert = new_text.join
@@ -197,7 +125,7 @@ class User < ActiveRecord::Base
     end
 
     def after_entry_options
-        prompt = TTY::Prompt.new
+        @prompt
         menu_or_close = prompt.select("What would you like to do now?", ["Go back to home screen", "Close journal"])
             case menu_or_close
             when "Go back to home screen"
@@ -212,26 +140,91 @@ class User < ActiveRecord::Base
     end 
 
     def see_all_entries
-        #self_entries = Entry.select {|entry| entry.user == self}
+        @prompt 
         @newline = "\n\n\n"
         puts `clear`
-        puts "Take a look at all your entries!"
+        puts "Here is a list of all your entries:"
         sleep(1.seconds)
         puts @newline
-        tp Entry.where(user: self) #, :entry_text, :emotion, :created_on
+        tp Entry.where(user: self), :id, :entry, :emotion, :created_on, :journal_name
         #tp Entry.all, :entry_text, :emotion
         puts @newline
-        after_entry_options
+        select_entry = prompt.yes?("Would you like to select an entry?")
+        if select_entry
+            select_entry_by_id
+        else
+            puts @newline
+            after_entry_options
+        end
     end
 
     def find_entries_by_emotion
         puts `clear`
-        prompt = TTY::Prompt.new
-        select_emo = prompt.select("Which emotion do you want to find entries for?", ["joy", "surprise", "neutral", "sadness", "fear", "anger", "disgust"])
+        choices = %w(joy surprise neutral sadness fear anger disgust)
+        @prompt
+        select_emo = prompt.multi_select("Which emotion(s) do you want to find entries for?", choices)
         puts @newline
-        tp Entry.where(user: self, emotion: select_emo) #, :entry_text, :emotion, :created_on
+        #binding.pry
+        tp Entry.where(user: self, emotion: select_emo).order('emotion ASC'), :id, :entry, :emotion, :created_on, :journal_name
         puts @newline
         after_entry_options
     end
 
+    def find_entries_by_journal_type
+        puts `clear`
+        choices = %w(Personal Work Activity)
+        @prompt
+        journal_name = prompt.multi_select("Which journal(s) do you want to find entries for?", choices)
+        puts @newline
+        #binding.pry
+        tp Entry.where(user: self, journal_name: journal_name).order('journal_name ASC'), :id, :entry, :emotion, :created_on, :journal_name
+        puts @newline
+        after_entry_options
+    end
+
+    def select_entry_by_id
+        @prompt 
+        puts @newline
+        #tp Entry.where(user: self), :id, :entry, :emotion, :created_on, :journal_name
+        #puts @newline
+        id = prompt.ask("Enter entry id:") do |q|
+            q.required true
+            q.validate /^[0-9]*$/
+            q.messages[:valid?] = "Invalid entry. Must be a number!"
+        end 
+        selected = Entry.where(user: self, id: id).first 
+        if selected
+            @current_entry = selected
+            tp Entry.where(user: self, id: id), :id, :entry, :emotion, :created_on, :journal_name
+            view_full_entry
+        else
+            puts "OOPS! It appears that isn't a valid entry. Please go back and try again."
+            sleep(2)
+            menu 
+        end
+    end
+
+    def view_full_entry
+        @prompt 
+        view_entry = prompt.yes?("Would you like to view the full entry?")
+        if view_entry
+            ap @current_entry.entry 
+        end
+        delete_an_entry
+    end
+
+    def delete_an_entry
+        @prompt 
+        delete_entry = prompt.yes?("Would you like to delete this entry?")
+            if delete_entry
+                are_u_sure = prompt.yes?("Are you SURE? Once an entry is deleted, it cannot be recovered.")
+                if are_u_sure
+                    @current_entry.destroy
+                    puts "Your entry has been deleted."
+                end
+            end
+            after_entry_options
+    end
+
 end
+
