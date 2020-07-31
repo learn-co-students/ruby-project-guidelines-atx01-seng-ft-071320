@@ -8,13 +8,18 @@ require 'table_print'
 require 'awesome_print'
 require 'whirly'
 require 'paint'
+require 'lolcat'
 class Cli
 
     attr_reader :journal_user
     attr_accessor :current_entry, :newline, :prompt, :current_journal
 
     def welcome_message
-        puts "Welcome to Emoticreate!" 
+        sleep(3)
+        3.times do
+            puts @newline
+        end 
+        puts "Welcome to Journalwave!" 
         puts "Please tell me your name."
         user_n = gets.chomp
 
@@ -187,7 +192,7 @@ class Cli
     end
 
     def close_journal
-        puts "This will close the application"
+        puts 'This will close the app'
     end 
 
     def see_all_entries
