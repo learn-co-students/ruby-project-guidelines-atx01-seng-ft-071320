@@ -1,4 +1,4 @@
-# MWelcome to J O U R N A L W A V E
+# Welcome to J O U R N A L W A V E
 
 A simple, retro-futuristic journal app that can analyze the emotions of your entries, with some other fun features!
 
@@ -14,22 +14,7 @@ We wanted to build an app using object relationships that allows the user to cre
 
 ### Gems
 
-source "https://rubygems.org"
-
-gem "sinatra-activerecord", '~>2.0'
-gem "sqlite3", '~>1.4.2'
-gem "pry"
-gem "require_all"
-gem 'activerecord'
-gem 'rake'
-gem 'tty-prompt', '~> 0.22.0'
-gem 'table_print'
-gem 'tty-spinner'
-gem 'whirly'
-gem 'paint'
-gem 'awesome_print'
-gem 'lolcat'
-gem 'colorize'
+![Alt text](gems_screenshot.png?raw=true "Gems")
 
 ### Executing the Program
 
