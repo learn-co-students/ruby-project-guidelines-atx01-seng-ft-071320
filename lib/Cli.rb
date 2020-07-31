@@ -21,7 +21,7 @@ class Cli
         @newline = "\n \n \n"
         #sleep(3)
         puts `clear`
-        puts "Welcome to Journalwave!".red.blink
+        puts "Welcome to Journalwave!".yellow.blink
         sleep(1)
         puts @newline
         puts "Please tell me your name."
