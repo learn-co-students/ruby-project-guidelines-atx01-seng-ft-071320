@@ -15,12 +15,16 @@ class Cli
     attr_accessor :current_entry, :newline, :prompt, :current_journal
 
     def welcome_message
+        @newline = "\n \n \n"
         sleep(3)
         3.times do
             puts @newline
         end 
         puts "Welcome to Journalwave!" 
+        sleep(1)
+        puts @newline
         puts "Please tell me your name."
+        puts @newline
         user_n = gets.chomp
 
         find_name = User.find{|user| user.name.upcase == user_n.upcase}
