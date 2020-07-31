@@ -9,29 +9,19 @@ require 'awesome_print'
 require 'whirly'
 require 'paint'
 require 'lolcat'
+require 'colorize'
+require 'colorized_string'
 class Cli
 
     attr_reader :journal_user
     attr_accessor :current_entry, :newline, :prompt, :current_journal
-
-    # def ascii_welcome
-    #     File.readlines("./lib/ascii_welcome.txt") do |line|
-    #       puts line
-    #     end
-    # end
-
-    #  def ascii_breathein
-    #     File.readlines("./lib/ascii_breathein.txt") do |line|
-    #       puts line
-    #     end
-    # end
 
     def welcome_message
         @prompt = TTY::Prompt.new 
         @newline = "\n \n \n"
         #sleep(3)
         puts `clear`
-        puts "Welcome to Journalwave!" 
+        puts "Welcome to Journalwave!".light_black.on_cyan.italic
         sleep(1)
         puts @newline
         puts "Please tell me your name."
@@ -97,7 +87,7 @@ class Cli
     def menu
         puts `clear`
         @prompt
-        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Delete an entry","Find entries by emotion", "Find entries by journal type", "Find entries by date", "Change user", "Exit"])
+        menu_select = prompt.select("What would you like to do in your journal today? Press ⇣ for more options.", ["Write a new entry", "See all entries", "Delete an entry","Find entries by emotion", "Find entries by journal type", "Find entries by date", "Moment of zen", "Change user", "Exit"])
         
         case menu_select
         when "Write a new entry"
@@ -112,6 +102,8 @@ class Cli
             find_entries_by_journal_type
         when "Find entries by date"
             find_entries_by_date
+        when "Moment of zen"
+            moment_of_zen
         when "Change user"
             welcome_message
         when "Exit"
@@ -149,22 +141,22 @@ class Cli
             sleep 1.5
         end
         emo = find_emotion(entry)
-        puts "Your emotion analysis finds that the primary emotion of this entry is: #{emo}"
+        puts "Your emotion analysis finds that the primary emotion of this entry is:".red
         puts "\n"
-        sleep(2)
+        puts "                 ★    ➞ ➞ ➞ ➞ ➞ ➞ ➞ ➞   #{emo}".yellow
+        sleep(3)
         puts "\n"
         write_new_entry(entry, emo, @current_journal, journal_name)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
-            sleep 3
+            sleep 4
             moment_of_zen
         elsif %w(neutral nothing).include? emo
-            puts "Looks like your day was just ok, and that's fine! Not every day can be amazing."
+            puts "Looks like your day was just ok, and that's fine! Not every day can be amazing. \n \n Thank you for taking the time to reflect on your day!"
         else
-            puts "Looks like you had a great day!"
+            puts "Looks like you had a great day! \n \n Thank you for taking the time to reflect on your day!"
         end
         puts @newline
-        puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
         after_entry_options
     end
 
@@ -206,7 +198,10 @@ class Cli
         puts `clear`
         fork{exec 'lolcat -a -d 4 /Users/a_norton/mod1/Project/ruby-project-guidelines-atx01-seng-ft-071320/lib/beach'}
         sleep(13)
+        puts "\n \n Thank you for taking the time to reflect on your day! Taking you back home.....".blue 
+        sleep 3
         puts `clear`
+        menu 
     end
 
     def after_entry_options
