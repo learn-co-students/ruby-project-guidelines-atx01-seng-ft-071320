@@ -74,7 +74,7 @@ class Cli
     def menu
         puts `clear`
         @prompt = TTY::Prompt.new
-        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Delete an entry","Find entries by emotion", "Find entries by journal type", "Change user", "Exit"])
+        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Delete an entry","Find entries by emotion", "Find entries by journal type", "Find entries by date", "Change user", "Exit"])
         
         case menu_select
         when "Write a new entry"
@@ -87,6 +87,8 @@ class Cli
             find_entries_by_emotion
         when "Find entries by journal type"
             find_entries_by_journal_type
+        when "Find entries by date"
+            find_entries_by_date
         when "Change user"
             welcome_message
         when "Exit"
@@ -243,6 +245,18 @@ class Cli
         puts @newline
         after_entry_options
     end
+
+    def find_entries_by_date
+        @prompt 
+        @date = prompt.ask("What date do you want to search? (MM/DD/YYYY)") do |q|
+                q.validate /[0-9][0-9]\/[0-9][0-9]\/[0-9][19|20][0-9][0-9]/
+                q.messages[:valid?] = "Invalid date format. Try again."
+        end 
+        date_entries = Entry.select { |entry| entry.created_on.strftime("%m/%d/%Y") == @date && entry.user == @journal_user}
+        tp date_entries
+        puts @newline
+        after_entry_options
+    end 
 
     def select_entry_by_id
         @prompt 
