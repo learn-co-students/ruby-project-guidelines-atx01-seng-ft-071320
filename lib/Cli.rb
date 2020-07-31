@@ -15,8 +15,9 @@ class Cli
     attr_accessor :current_entry, :newline, :prompt, :current_journal
 
     def welcome_message
+        @prompt = TTY::Prompt.new 
         @newline = "\n \n \n"
-        sleep(3)
+        #sleep(3)
         3.times do
             puts @newline
         end 
@@ -34,41 +35,42 @@ class Cli
             puts "\nWelcome back #{user_n}! Let's take some time to reflect on our day."
             sleep(2.seconds)
             puts `clear`
-            # puts "To help with that, let's do a breathing exercise."
-            #     sleep(2.seconds)
-            #     puts "Ready?"
-            #     sleep(1.seconds)
-            #         puts "Breathe in..."
-            #         sleep(4.seconds)
-            #         puts "Hold..."
-            #         sleep(8.seconds)
-            #         puts "Breathe out..."
-            #         sleep(6.seconds)
-            #         #puts "Let's do it again!"
-            #         #sleep(2.seconds)
-            #         puts `clear`
-            menu
-            
+            ask_exercise
+            menu      
         else
             puts "\nWelcome to Emoticreate, #{user_n}! Let's take some time to reflect on our day."
             sleep(2.seconds)
             puts `clear`
-            # puts "To help with that, let's do a breathing exercise."
-            #     sleep(2.seconds)
-            #     puts "Ready?"
-            #     sleep(1.seconds)
-            #         puts "Breathe in..."
-            #         sleep(4.seconds)
-            #         puts "Hold..."
-            #         sleep(8.seconds)
-            #         puts "Breathe out..."
-            #         sleep(6.seconds)
-            #         #puts "Let's do it again!"
-            #         #sleep(2.seconds)
-            #         puts `clear`
+            sleep(1)
+            ask_exercise
             menu
         end
 
+    end
+
+    def ask_exercise
+        @prompt
+        exercise = prompt.yes?("Would you like to do a relaxing breathing exercise to improve your mood?")
+        if exercise
+            breathe
+        end
+    end
+
+    def breathe
+        puts `clear`
+        puts "Clear your mind and focus on your breath."
+        sleep(1)
+        puts 'Ready?'
+        sleep(1)
+        puts "Breathe in..."
+        sleep(4)
+        puts "Hold..."
+        sleep(8)
+        puts "Breathe out..."
+        sleep(6)
+        puts `clear`
+        puts 'Excellent. Let\'s get started!'
+        sleep(1.5)
     end
     
     def menu
@@ -120,7 +122,6 @@ class Cli
             q.validate /\D\w\s./
             q.messages[:valid?] = "Invalid entry. Try again with a word or sentence."
         end 
-        binding.pry 
         puts "Let's analyze your emotions!" #put spinner while finding emotion
         Whirly.configure spinner: "bouncingBall", status: "A n a l y z i n g     E m o t i o n s"
         Whirly.start do 
@@ -140,8 +141,7 @@ class Cli
         else
             puts "Looks like you had a great day!"
         end
-        puts "\n"
-        puts "\n" # refactor lines
+        puts @newline
         puts "Thank you for taking the time to reflect on your day!" #go back to menu or exit
         after_entry_options
     end
