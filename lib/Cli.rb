@@ -18,7 +18,7 @@ class Cli
 
     def welcome_message
         @prompt = TTY::Prompt.new(help_color: :cyan)
-        @newline = "\n \n \n"
+        @newline = "\n \n"
         #sleep(3)
         puts `clear`
         puts "Welcome to Journalwave!".yellow.blink
@@ -290,6 +290,7 @@ class Cli
         if selected
             @current_entry = selected
             tp Entry.where(user: @journal_user, id: id), :id, :entry, :emotion, :created_on, :journal_name
+            puts @newline
             view_full_entry
         else
             puts "OOPS! It appears that isn't a valid entry. Please go back and try again."
@@ -303,6 +304,7 @@ class Cli
         view_entry = prompt.yes?("Would you like to view the full entry?    ")
         if view_entry
             ap @current_entry.entry 
+            puts @newline
         end
         delete_an_entry
     end
@@ -310,10 +312,12 @@ class Cli
     def delete_an_entry
         @prompt 
         delete_entry = prompt.yes?("Would you like to delete this entry?    ")
+        puts @newline
             if delete_entry
                 are_u_sure = prompt.yes?("Are you SURE? Once an entry is deleted, it cannot be recovered.    ")
                 if are_u_sure
                     @current_entry.destroy
+                    puts @newline
                     puts "Your entry has been deleted."
                 end
             end
