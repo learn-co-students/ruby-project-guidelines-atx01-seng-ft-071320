@@ -62,12 +62,21 @@ class Cli
         sleep(1)
         puts 'Ready?'
         sleep(1)
-        puts "Breathe in..."
-        sleep(4)
-        puts "Hold..."
-        sleep(8)
-        puts "Breathe out..."
-        sleep(6)
+        Whirly.configure spinner: "circled_number", interval: 1000, mode: "linear"
+        Whirly.start do
+            Whirly.status = "Breathe in..."
+            sleep 4
+        end
+        Whirly.start do
+            Whirly.status = "Hold..."
+            sleep 8
+        end
+        Whirly.start do
+            Whirly.status = "Breathe out..."
+            sleep 6
+        end
+        sleep 1
+        Whirly.reset
         puts `clear`
         puts 'Excellent. Let\'s get started!'
         sleep(1.5)
@@ -75,7 +84,7 @@ class Cli
     
     def menu
         puts `clear`
-        @prompt = TTY::Prompt.new
+        @prompt
         menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Delete an entry","Find entries by emotion", "Find entries by journal type", "Find entries by date", "Change user", "Exit"])
         
         case menu_select
