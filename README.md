@@ -42,6 +42,7 @@ When finished, selext exit to close the program (and see a cute kitty!)
 Music is by Cellars (one of the creators of this application) ALL RIGHTS RESERVED  
 All ASCII text was generated using TAAG (text to ASCII art generator) : http://patorjk.com/software/taag/#p=testall&f=X992&t=Welcome  
 ASCII art found at https://user.xmission.com/~emailbox/ascii_cats.htm and https://ascii.co.uk/art/beach  
+Adding music was made easy after reading this blog post: https://simplemitch.com/2020/02/20/afplay-definitive-guide-to-manipulating-audio-in-your-cli-application-ruby/   
 created by github users @allenorton and @christina888  
 
 ### Contributions
