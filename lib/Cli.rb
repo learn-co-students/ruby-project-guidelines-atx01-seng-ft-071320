@@ -60,7 +60,7 @@ class Cli
 
     def ask_exercise
         @prompt
-        exercise = prompt.yes?("Would you like to do a relaxing breathing exercise to improve your mood?")
+        exercise = prompt.yes?("Would you like to do a relaxing breathing exercise to improve your mood? Y/n")
         if exercise
             breathe
         end
@@ -156,6 +156,7 @@ class Cli
         write_new_entry(entry, emo, @current_journal, journal_name)
         if %w(sadness anger fear disgust).include? emo
             puts "It's no fun to feel negative emotions! Perhaps a moment of zen will help!"
+            sleep 3
             moment_of_zen
         elsif %w(neutral nothing).include? emo
             puts "Looks like your day was just ok, and that's fine! Not every day can be amazing."
@@ -202,8 +203,9 @@ class Cli
     end
 
     def moment_of_zen
-        puts "This will be a moment of zen <3 maybe we can do something funny here"
-        sleep(2.seconds)
+        puts `clear`
+        fork{exec 'lolcat -a -d 4 /Users/a_norton/mod1/Project/ruby-project-guidelines-atx01-seng-ft-071320/lib/beach'}
+        sleep(13)
         puts `clear`
     end
 
@@ -234,7 +236,7 @@ class Cli
         tp Entry.where(user: @journal_user), :id, :entry, :emotion, :created_on, :journal_name
         #tp Entry.all, :entry_text, :emotion
         puts @newline
-        select_entry = prompt.yes?("Would you like to select an entry?")
+        select_entry = prompt.yes?("Would you like to select an entry? Y/n")
         if select_entry
             select_entry_by_id
         else
@@ -303,7 +305,7 @@ class Cli
 
     def view_full_entry
         @prompt 
-        view_entry = prompt.yes?("Would you like to view the full entry?")
+        view_entry = prompt.yes?("Would you like to view the full entry? Y/n")
         if view_entry
             ap @current_entry.entry 
         end
@@ -312,9 +314,9 @@ class Cli
 
     def delete_an_entry
         @prompt 
-        delete_entry = prompt.yes?("Would you like to delete this entry?")
+        delete_entry = prompt.yes?("Would you like to delete this entry? Y/n")
             if delete_entry
-                are_u_sure = prompt.yes?("Are you SURE? Once an entry is deleted, it cannot be recovered.")
+                are_u_sure = prompt.yes?("Are you SURE? Once an entry is deleted, it cannot be recovered. Y/n")
                 if are_u_sure
                     @current_entry.destroy
                     puts "Your entry has been deleted."
