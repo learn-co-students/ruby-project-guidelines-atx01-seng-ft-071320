@@ -17,7 +17,7 @@ class Cli
     attr_accessor :current_entry, :newline, :prompt, :current_journal
 
     def welcome_message
-        @prompt = TTY::Prompt.new 
+        @prompt = TTY::Prompt.new(help_color: :cyan)
         @newline = "\n \n \n"
         #sleep(3)
         puts `clear`
@@ -50,7 +50,7 @@ class Cli
 
     def ask_exercise
         @prompt
-        exercise = prompt.yes?("Would you like to do a relaxing breathing exercise to improve your mood? Y/n")
+        exercise = prompt.yes?("Would you like to do a relaxing breathing exercise to improve your mood?")
         if exercise
             breathe
         end
@@ -87,7 +87,7 @@ class Cli
     def menu
         puts `clear`
         @prompt
-        menu_select = prompt.select("What would you like to do in your journal today? Press ⇣ for more options.", ["Write a new entry", "See all entries", "Delete an entry","Find entries by emotion", "Find entries by journal type", "Find entries by date", "Moment of zen", "Change user", "Exit"])
+        menu_select = prompt.select("What would you like to do in your journal today?", ["Write a new entry", "See all entries", "Delete an entry","Find entries by emotion", "Find entries by journal type", "Find entries by date", "Moment of zen", "Change user", "Exit"])
         
         case menu_select
         when "Write a new entry"
@@ -231,7 +231,7 @@ class Cli
         tp Entry.where(user: @journal_user), :id, :entry, :emotion, :created_on, :journal_name
         #tp Entry.all, :entry_text, :emotion
         puts @newline
-        select_entry = prompt.yes?("Would you like to select an entry? Y/n")
+        select_entry = prompt.yes?("Would you like to select an entry?    ")
         if select_entry
             select_entry_by_id
         else
@@ -300,7 +300,7 @@ class Cli
 
     def view_full_entry
         @prompt 
-        view_entry = prompt.yes?("Would you like to view the full entry? Y/n")
+        view_entry = prompt.yes?("Would you like to view the full entry?    ")
         if view_entry
             ap @current_entry.entry 
         end
@@ -309,9 +309,9 @@ class Cli
 
     def delete_an_entry
         @prompt 
-        delete_entry = prompt.yes?("Would you like to delete this entry? Y/n")
+        delete_entry = prompt.yes?("Would you like to delete this entry?    ")
             if delete_entry
-                are_u_sure = prompt.yes?("Are you SURE? Once an entry is deleted, it cannot be recovered. Y/n")
+                are_u_sure = prompt.yes?("Are you SURE? Once an entry is deleted, it cannot be recovered.    ")
                 if are_u_sure
                     @current_entry.destroy
                     puts "Your entry has been deleted."
