@@ -253,7 +253,7 @@ class Cli
                 q.messages[:valid?] = "Invalid date format. Try again."
         end 
         date_entries = Entry.select { |entry| entry.created_on.strftime("%m/%d/%Y") == @date && entry.user == @journal_user}
-        tp date_entries
+        tp date_entries, :id, :entry, :emotion, :created_on, :journal_name
         puts @newline
         after_entry_options
     end 
