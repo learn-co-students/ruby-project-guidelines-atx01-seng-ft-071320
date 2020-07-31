@@ -192,7 +192,9 @@ class Cli
     end
 
     def close_journal
-        puts 'This will close the app'
+        puts `clear`
+        Goodbye.new.bye
+        puts `clear`
     end 
 
     def see_all_entries
