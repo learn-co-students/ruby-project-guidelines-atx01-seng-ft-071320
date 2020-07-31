@@ -64,7 +64,7 @@ class Cli
         sleep(1)
         puts 'Ready?'
         sleep(1)
-        Whirly.configure spinner: "circled_number", interval: 1000, mode: "linear"
+        Whirly.configure spinner: "circled_number", interval: 1000, mode: "linear", color: false
         Whirly.start do
             Whirly.status = "Breathe in..."
             sleep 4
