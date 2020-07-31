@@ -18,11 +18,11 @@ We wanted to build an app using object relationships that allows the user to cre
 
 ### Executing the Program
 
-Fork and clone the Journalwave repo
-Run bundle install
-Run rake db:migrate
-Run rake db:seed
-Run ruby ./bin/run.rb
+Fork and clone the Journalwave repo  
+Run bundle install  
+Run rake db:migrate  
+Run rake db:seed  
+Run ruby ./bin/run.rb  
 
 ## API, Credits, and Contributions
 ### API Reference
@@ -33,20 +33,20 @@ https://rapidapi.com/twinword/api/emotion-analysis
 
 ### How To Use
 
-Begin the program by following the installation instructions above. 
-Once started, you can choose to do a relaxing breathing exercise.
-Once you're at the main menu, use your cursor to select which action you'd like to take (we recommend starting with write an entry!)
-When finished, selext exit to close the program (and see a cute kitty!)
+Begin the program by following the installation instructions above.   
+Once started, you can choose to do a relaxing breathing exercise.  
+Once you're at the main menu, use your cursor to select which action you'd like to take (we recommend starting with write an entry!)  
+When finished, selext exit to close the program (and see a cute kitty!)  
 
 ### Credits
-Music is by Cellars (one of the creators of this application) ALL RIGHTS RESERVED
-All ASCII text was generated using TAAG (text to ASCII art generator) : http://patorjk.com/software/taag/#p=testall&f=X992&t=Welcome
-ASCII art found at https://user.xmission.com/~emailbox/ascii_cats.htm and https://ascii.co.uk/art/beach
-created by github users @allenorton and @christina888
+Music is by Cellars (one of the creators of this application) ALL RIGHTS RESERVED  
+All ASCII text was generated using TAAG (text to ASCII art generator) : http://patorjk.com/software/taag/#p=testall&f=X992&t=Welcome  
+ASCII art found at https://user.xmission.com/~emailbox/ascii_cats.htm and https://ascii.co.uk/art/beach  
+created by github users @allenorton and @christina888  
 
 ### Contributions
-Anyone who wishes to contribute should fork and clone the repository to their local repo.
-Please contact a creator before pushing to the master branch!
+Anyone who wishes to contribute should fork and clone the repository to their local repo.  
+Please contact a creator before pushing to the master branch!  
 
 ### License
 
