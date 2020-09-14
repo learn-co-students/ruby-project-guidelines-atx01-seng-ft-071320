@@ -170,6 +170,7 @@ class Cli
         #binding.pry 
         url = URI("https://twinword-emotion-analysis-v1.p.rapidapi.com/analyze/?text=#{insert}")
         #binding.pry 
+        emotionalll = ENV["EMOTION_API_KEY"]
 
         http = Net::HTTP.new(url.host, url.port)
         http.use_ssl = true
@@ -177,7 +178,7 @@ class Cli
 
         request = Net::HTTP::Get.new(url)
         request["x-rapidapi-host"] = 'twinword-emotion-analysis-v1.p.rapidapi.com'
-        request["x-rapidapi-key"] = 'adced4ae6amshb206e15787ec65dp17d3adjsncabafd1abcbf'
+        request["x-rapidapi-key"] = emotionalll
 
         response = http.request(request)
         #puts response.read_body
